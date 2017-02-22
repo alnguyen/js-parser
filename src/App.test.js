@@ -1,9 +1,23 @@
-import App from './App';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { mount, shallow } from 'enzyme';
+import {
+  default as App,
+  defaultState
+} from './App'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { mount, shallow } from 'enzyme'
 
 describe('App', () => {
+  describe('::State', () => {
+    let app
+    beforeEach(() => {
+      app = shallow(<App />)
+    })
+
+    it('loads default state on render', () => {
+      expect(app.state()).toEqual(defaultState)
+    })
+  })
+
   describe('::Rendering', () => {
     let app
     beforeEach(() => {

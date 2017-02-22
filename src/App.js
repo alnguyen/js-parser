@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 
+export const defaultState = {
+  blacklist: [],
+  userInput: '',
+  whitelist: []
+}
+
 export class App extends Component {
   constructor(props) {
     super(props)
-    this.state = {userInput: ''}
+    this.state = defaultState
   }
 
   handleChange = (evt) => {
