@@ -136,11 +136,23 @@ describe('App', () => {
       })
 
       it('can add multiple selections to same list', () => {
-
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'forLoop' }})
+        expect(app.state().whitelist.length).toEqual(1)
+        expect(app.state().blacklist.length).toEqual(0)
+        opt.simulate('change', { target: { value: 'whitelist', name: 'ifStatement' }})
+        expect(app.state().blacklist.length).toEqual(0)
+        expect(app.state().whitelist.length).toEqual(2)
       })
 
       it('can add different selections to different lists', () => {
-        
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'forLoop' }})
+        opt.simulate('change', { target: { value: 'blacklist', name: 'ifStatement' }})
+        expect(app.state().blacklist.length).toEqual(1)
+        expect(app.state().whitelist.length).toEqual(1)
       })
     })
   })

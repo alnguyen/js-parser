@@ -49,8 +49,6 @@ export class App extends Component {
         if (bIdx !== -1) newBList.splice(bIdx, 1)
         this.setState({blacklist: newBList, whitelist: newWList})
         break
-      default:
-        return
     }
   }
 
