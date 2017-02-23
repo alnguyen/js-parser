@@ -6,9 +6,9 @@ import {
   FUNCTIONALITIES,
   INSTRUCTIONS
 } from './constants'
+import { mount, shallow } from 'enzyme'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { mount, shallow } from 'enzyme'
 
 describe('App', () => {
   describe('::State', () => {
@@ -34,9 +34,9 @@ describe('App', () => {
       expect(instructions.text()).toEqual(INSTRUCTIONS)
     })
 
-    it('renders the functionality options', () => {
+    it('renders the functionality display text', () => {
       const functionalitiesList = app.find('.functionality--list')
-      const functionalitiesItems = functionalitiesList.find('.functionality--item')
+      const functionalitiesItems = functionalitiesList.find('.functionality--item__text')
       expect(functionalitiesList.length).toBe(1)
       expect(functionalitiesItems.length).toBe(3)
       const texts = functionalitiesItems.map((item) => item.text())
@@ -45,10 +45,17 @@ describe('App', () => {
       })
     })
 
+    it('renders the functionality options', () => {
+      const functionalitiesOptions = app.find('.functionality--item__opt')
+      const optionKeys = Object.keys(FUNCTIONALITIES)
+      const expectedOptions = optionKeys.length * 3 // whitelist/blacklist/none
+      expect(functionalitiesOptions.length).toBe(expectedOptions)
+    })
+
     it('renders an empty textarea on load', () => {
       const textArea = app.find('textarea')
       expect(textArea.length).toBe(1)
-      expect(textArea.node.props.value).toEqual('') // TODO: Figure this out
+      expect(textArea.node.props.value).toEqual('')
     })
   })
 
@@ -57,11 +64,84 @@ describe('App', () => {
     beforeEach(() => {
       app = mount(<App />)
     })
+
     it('updates state on input change', () => {
       const textArea = app.find('textarea')
       const value = 'let a = 3;'
       textArea.simulate('change', {target: {value}})
       expect(app.state().userInput).toEqual(value)
+    })
+
+    describe('::functionality lists', () => {
+      it('adds item to whitelist', () => {
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'forLoop' }})
+        expect(app.state().blacklist.length).toEqual(0)
+        expect(app.state().whitelist.length).toEqual(1)
+        expect(app.state().whitelist[0]).toEqual('forLoop')
+      })
+
+      it('adds item to blacklist', () => {
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'blacklist', name: 'forLoop' }})
+        expect(app.state().whitelist.length).toEqual(0)
+        expect(app.state().blacklist.length).toEqual(1)
+        expect(app.state().blacklist[0]).toEqual('forLoop')
+      })
+
+      it('removes from whitelist and moves to blacklist', () => {
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'forLoop' }})
+        expect(app.state().blacklist.length).toEqual(0)
+        expect(app.state().whitelist.length).toEqual(1)
+        opt.simulate('change', { target: { value: 'blacklist', name: 'forLoop' }})
+        expect(app.state().whitelist.length).toEqual(0)
+        expect(app.state().blacklist.length).toEqual(1)
+      })
+
+      it('removes from blacklist and moves to whitelist', () => {
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'blacklist', name: 'forLoop' }})
+        expect(app.state().whitelist.length).toEqual(0)
+        expect(app.state().blacklist.length).toEqual(1)
+        opt.simulate('change', { target: { value: 'whitelist', name: 'forLoop' }})
+        expect(app.state().blacklist.length).toEqual(0)
+        expect(app.state().whitelist.length).toEqual(1)
+      })
+
+      it('removes item from blacklist when selecting none', () => {
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'blacklist', name: 'forLoop' }})
+        expect(app.state().whitelist.length).toEqual(0)
+        expect(app.state().blacklist.length).toEqual(1)
+        opt.simulate('change', { target: { value: 'none', name: 'forLoop' }})
+        expect(app.state().blacklist.length).toEqual(0)
+        expect(app.state().whitelist.length).toEqual(0)
+      })
+
+      it('removes item from whitelist when selecting none', () => {
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'forLoop' }})
+        expect(app.state().whitelist.length).toEqual(1)
+        expect(app.state().blacklist.length).toEqual(0)
+        opt.simulate('change', { target: { value: 'none', name: 'forLoop' }})
+        expect(app.state().blacklist.length).toEqual(0)
+        expect(app.state().whitelist.length).toEqual(0)
+      })
+
+      it('can add multiple selections to same list', () => {
+
+      })
+
+      it('can add different selections to different lists', () => {
+        
+      })
     })
   })
 })
