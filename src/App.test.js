@@ -57,6 +57,11 @@ describe('App', () => {
       expect(textArea.length).toBe(1)
       expect(textArea.node.props.value).toEqual('')
     })
+
+    it('renders passing status on load', () => {
+      const statusText = app.find('.status')
+      expect(statusText.text()).toEqual('passing')
+    })
   })
 
   describe('::Actions', () => {

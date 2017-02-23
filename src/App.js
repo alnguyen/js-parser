@@ -8,7 +8,8 @@ import './App.css';
 export const defaultState = {
   blacklist: [],
   userInput: '',
-  whitelist: []
+  whitelist: [],
+  status: 'passing'
 }
 
 export class App extends Component {
@@ -113,6 +114,16 @@ export class App extends Component {
     )
   }
 
+  renderResult () {
+    const { status } = this.state
+    const classNames = `status ${status}`
+    return (
+      <span className={classNames}>
+        {status}
+      </span>
+    )
+  }
+
   render() {
     return (
       <div className="App">
@@ -124,6 +135,7 @@ export class App extends Component {
         </p>
         {this.renderFunctionalityList()}
         {this.renderTextArea()}
+        {this.renderResult()}
       </div>
     );
   }
