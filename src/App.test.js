@@ -2,6 +2,10 @@ import {
   default as App,
   defaultState
 } from './App'
+import {
+  FUNCTIONALITIES,
+  INSTRUCTIONS
+} from './constants'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { mount, shallow } from 'enzyme'
@@ -22,6 +26,23 @@ describe('App', () => {
     let app
     beforeEach(() => {
       app = shallow(<App />)
+    })
+
+    it('renders the instructions on load', () => {
+      const instructions = app.find('.App-instructions')
+      expect(instructions.length).toBe(1)
+      expect(instructions.text()).toEqual(INSTRUCTIONS)
+    })
+
+    it('renders the functionality options', () => {
+      const functionalitiesList = app.find('.functionality--list')
+      const functionalitiesItems = functionalitiesList.find('.functionality--item')
+      expect(functionalitiesList.length).toBe(1)
+      expect(functionalitiesItems.length).toBe(3)
+      const texts = functionalitiesItems.map((item) => item.text())
+      Object.keys(FUNCTIONALITIES).forEach((item) => {
+        expect(texts).toContain(FUNCTIONALITIES[item].text)
+      })
     })
 
     it('renders an empty textarea on load', () => {
