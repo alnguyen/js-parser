@@ -4,7 +4,10 @@ body {
   font-family: sans-serif;
 }
 
-textarea { min-width: 50%; }
+textarea {
+  min-height: 200px;
+  min-width: 50%;
+}
 
 .functionality--list { list-style-type: none; }
 
@@ -12,7 +15,6 @@ textarea { min-width: 50%; }
   display: block;
   margin: 0 auto;
   width: 80px;
-
-  .passing { background-color: green; }
-  .failed { background-color: red; }
 }
+.status.passing { background-color: green; }
+.status.failing { background-color: red; }

@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
 import {
   FUNCTIONALITIES,
   INSTRUCTIONS
 } from './constants'
+import React, { Component } from 'react';
 import './App.css';
+
+const acorn = require('acorn') // Figure out why import doesn't work
 
 export const defaultState = {
   blacklist: [],
@@ -20,7 +22,16 @@ export class App extends Component {
 
   handleInputChange = (evt) => {
     const userInput = evt.target.value
-    this.setState({userInput})
+    let status = 'passing'
+    let parsed
+    try {
+      parsed = acorn.parse(userInput)
+    } catch (err) {
+      status = 'failing'
+    } finally {
+      console.log(parsed)
+      this.setState({userInput, status})
+    }
   }
 
   handleOptionChange = (evt) => {
