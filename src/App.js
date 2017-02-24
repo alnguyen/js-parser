@@ -21,15 +21,10 @@ export class App extends Component {
     this.state = defaultState
   }
 
-  passesChecks = (userInput) => {
-    const { blacklist, whitelist } = this.state
-    return passesList(userInput, whitelist)
-  }
-
+  // -- Handlers -- //
   handleInputChange = (evt) => {
     const userInput = evt.target.value
     let status = this.state.status
-    let parsed
     try {
       status = this.passesChecks(userInput) ? PASSING : FAILING
     } catch (err) {
@@ -69,6 +64,12 @@ export class App extends Component {
     }
   }
 
+  // -- Convenience -- //
+  passesChecks = (userInput) => {
+    const { blacklist, whitelist } = this.state
+    return passesList(userInput, whitelist) && passesList(userInput, blacklist, false)
+  }
+
   isSelected = (func, list) => {
     const { blacklist, whitelist } = this.state
     switch(list) {
@@ -81,6 +82,7 @@ export class App extends Component {
     }
   }
 
+  // -- Renders -- //
   renderFunctionalityList () {
     const functionalities = Object.keys(FUNCTIONALITIES)
     const renderFunctionality = functionalities.map((func, idx) => {

@@ -10,6 +10,15 @@ describe('parser', () => {
         b.push(i)
       }
     }`
+
+  it('throws if there is an error', () => {
+    const badInput = `
+      let a
+      for (
+    `
+    expect(passesList.bind(null, badInput, ['VariableDeclaration'])).toThrow()
+  })
+  
   describe('whitelisting', () => {
     it('returns true for empty list', () => {
       expect(passesList(input, [])).toEqual(true)
@@ -26,21 +35,19 @@ describe('parser', () => {
     it('returns false if it does not meet criteria', () => {
       expect(passesList(input, ['FunctionDeclaration'])).toEqual(false)
     })
-
-    it('returns errors with bad input', () => {
-      expect(passesList(input, ['ForStatement', 'FunctionDeclaration'])).toEqual(false)
-    })
-
-    it('throws if there is an error', () => {
-      const badInput = `
-        let a
-        for (
-      `
-      expect(passesList.bind(null, badInput, ['VariableDeclaration'])).toThrow()
-    })
   })
 
   describe('blacklisting', () => {
+    it('returns true for empty list', () => {
+      expect(passesList(input, [], false)).toEqual(true)
+    })
 
+    it('returns true if funcationlity is not in blacklist', () => {
+      expect(passesList(input, ['FunctionDeclaration'], false)).toEqual(true)
+    })
+
+    it('returns false if functionality is blacklisted', () => {
+      expect(passesList(input, ['ForStatement'], false)).toEqual(false)
+    })
   })
 })

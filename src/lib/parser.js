@@ -22,5 +22,5 @@ export function passesList (input, list, inclusive = true) {
 
   parsed = acorn.parse(input)
   walk.simple(parsed, visitSetup)
-  return Object.keys(visitedTracker).map((key) => visitedTracker[key]).indexOf(false) < 0
+  return Object.keys(visitedTracker).map((key) => visitedTracker[key]).indexOf(!inclusive) < 0
 }
