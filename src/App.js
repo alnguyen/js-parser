@@ -1,11 +1,12 @@
 import {
+  FAILING,
   FUNCTIONALITIES,
-  INSTRUCTIONS
+  INSTRUCTIONS,
+  PASSING
 } from './constants'
+import { passesList } from './lib/parser'
 import React, { Component } from 'react';
 import './App.css';
-
-const acorn = require('acorn') // Figure out why import doesn't work
 
 export const defaultState = {
   blacklist: [],
@@ -20,16 +21,20 @@ export class App extends Component {
     this.state = defaultState
   }
 
+  passesChecks = (userInput) => {
+    const { blacklist, whitelist } = this.state
+    return passesList(userInput, whitelist)
+  }
+
   handleInputChange = (evt) => {
     const userInput = evt.target.value
-    let status = 'passing'
+    let status = this.state.status
     let parsed
     try {
-      parsed = acorn.parse(userInput)
+      status = this.passesChecks(userInput) ? PASSING : FAILING
     } catch (err) {
-      status = 'failing'
+      status = FAILING
     } finally {
-      console.log(parsed)
       this.setState({userInput, status})
     }
   }

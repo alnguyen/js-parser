@@ -3,8 +3,10 @@ import {
   defaultState
 } from './App'
 import {
+  FAILING,
   FUNCTIONALITIES,
-  INSTRUCTIONS
+  INSTRUCTIONS,
+  PASSING
 } from './constants'
 import { mount, shallow } from 'enzyme'
 import React from 'react'
@@ -75,6 +77,42 @@ describe('App', () => {
       const value = 'let a = 3;'
       textArea.simulate('change', {target: {value}})
       expect(app.state().userInput).toEqual(value)
+    })
+
+    describe('::status', () => {
+      it('sets status to passing on success', () => {
+        const textArea = app.find('textarea')
+        const value = 'let a = 3;'
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'VariableDeclaration' }})
+
+        textArea.simulate('change', {target: {value}})
+        expect(app.state().status).toEqual(PASSING)
+      })
+
+      it('sets status to failing on error', () => {
+        const textArea = app.find('textarea')
+        const value = `
+          let a = 5
+          for (
+        `
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'ForStatement' }})
+        textArea.simulate('change', {target: {value}})
+        expect(app.state().status).toEqual(FAILING)
+      })
+
+      it('sets status to failing on failure', () => {
+        const textArea = app.find('textarea')
+        const value = 'let a = 5;'
+        const functionalityItem = app.find('.functionality--item').first()
+        const opt = functionalityItem.find('.functionality--item__opt').first()
+        opt.simulate('change', { target: { value: 'whitelist', name: 'ForStatement' }})
+        textArea.simulate('change', {target: {value}})
+        expect(app.state().status).toEqual(FAILING)
+      })
     })
 
     describe('::functionality lists', () => {
