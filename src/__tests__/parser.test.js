@@ -1,4 +1,8 @@
-import { passesList, passesStructure } from '../lib/parser'
+import {
+  passesList,
+  passesStructure,
+  passesStructureStrict
+} from '../lib/parser'
 const acorn = require('acorn')
 
 describe('parser', () => {
@@ -55,27 +59,64 @@ describe('parser', () => {
   })
 
   describe('#passStructure', () => {
-    it('returns undefined for no structure expectation', () => {
-      expect(passesStructure(input, null)).toEqual(undefined)
+    it('returns empty array for no structure expectation', () => {
+      expect(passesStructure(input, null)).toEqual([])
     })
 
-    it('returns false if structure is not met', () => {
-      expect(passesStructure(input, {})).toEqual(undefined)
+    it('returns empty array if structure is not present', () => {
+      expect(passesStructure(input, {})).toEqual([])
     })
 
-    it.only('returns true if structure passes', () => {
+    describe('not-strict', () => {
       const userInput = `
         for(var i=0; i<5; ++i){
           if (i === 5) {
             break
           }
-        }
-      `
-      const structure = {
-        'IfStatement': ['ForStatement', 'IfStatement']
-      }
+          for(var j = 5; j < 10; ++j){
+            if (j === 7) break
+          }
+        }`
 
-      expect(passesStructure(userInput, structure)).toEqual([])
+      it('returns empty array if structure passes', () => {
+        const structure = {
+          'IfStatement': ['ForStatement', 'IfStatement']
+        }
+
+        expect(passesStructure(userInput, structure)).toEqual([])
+      })
+
+      it('returns functionality if structure is not met', () => {
+        const structure = {
+          'IfStatement': ['ForStatement', 'IfStatement'],
+          'ForStatement': ['ForStatement', 'IfStatement', 'ForStatement']
+        }
+
+        expect(passesStructure(userInput, structure)).toEqual(['ForStatement'])
+      })
+    })
+
+    describe('strict', () => {
+      const userInput = `
+        for(var i=0; i<5; ++i) {
+          if (i === 3) {
+            break
+          }
+        }`
+      it('returns empty array if structure passes', () => {
+        const structure = {
+          'BreakStatement': ['Program', 'ForStatement', 'BlockStatement', 'IfStatement', 'BlockStatement', 'BreakStatement']
+        }
+        expect(passesStructureStrict(userInput, structure)).toEqual([])
+      })
+
+      it('returns functionality if structure is not met', () => {
+        const structure = {
+          'BreakStatement': ['ForStatement', 'IfStatement', 'BreakStatement']
+        }
+
+        expect(passesStructureStrict(userInput, structure)).toEqual(['BreakStatement'])
+      })
     })
   })
 })

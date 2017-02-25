@@ -1,13 +1,36 @@
+import { isEqual } from 'lodash/lang'
+import { some } from 'lodash/collection'
 const acorn = require('acorn')
 const walk = require('acorn/dist/walk')
 
+// -- Convenience -- //
 function markAsVisited (tracker, node) {
   tracker[node.type] = true
 }
 
 function ancestorWalking (tracker, node, ancestors) {
   const types = ancestors.map((anc) => anc.type)
-  tracker[node.type].push(types) // Copies ancestors
+  tracker[node.type].push(types)
+}
+
+function nonStrictComparison (expected, ancestry) {
+  if (expected.length > ancestry.length) return false
+
+  let lastIndex = 0
+  let passed = false
+  loop1:
+  for(var i = 0; i < expected.length; ++i) {
+    loop2:
+    for(var j = lastIndex; j < ancestry.length; ++j) {
+      if (expected[i] === ancestry[j]) {
+        lastIndex = j + 1
+        if (i === expected.length - 1) passed = true
+        break loop2
+      }
+      if (j === ancestry.length - 1) break loop1
+    }
+  }
+  return passed
 }
 
 /*
@@ -23,6 +46,8 @@ export function passesList (input, list, marker = true) {
   const parsed = acorn.parse(input)
   const visitSetup = {}
   const visitedTracker = {}
+
+  // Sets up the callback methods for the walkers for specific functions
   list.forEach((func) => {
     visitedTracker[func] = false
     visitSetup[func] = markAsVisited.bind(null, visitedTracker)
@@ -61,20 +86,47 @@ export function passesList (input, list, marker = true) {
            - (Strict): Fail
            - (Non-strict): Pass
 
-  Output - (String) Functionality that doesn't meet the criteria
+  Output - (Array) List of functionality that doesn't meet the expected criteria
 */
-export function passesStructure (input, structure, strict = false) {
+export function passesStructure (input, structure) {
   const struct = structure || {}
   const list = Object.keys(struct)
   if (!list.length) return []
   const parsed = acorn.parse(input)
   const ancestorTracker = {}
   const ancestorSetup = {}
+  const failures = []
   list.forEach((func) => {
     ancestorTracker[func] = []
     ancestorSetup[func] = ancestorWalking.bind(null, ancestorTracker)
   })
   walk.ancestor(parsed, ancestorSetup)
-  console.log({a: ancestorTracker['IfStatement']})
-  return []
+  list.forEach((func) => {
+    if (!some(ancestorTracker[func], nonStrictComparison.bind(null, struct[func]))) {
+      failures.push(func)
+    }
+  })
+  return failures
+}
+
+export function passesStructureStrict (input, structure) {
+  const struct = structure || {}
+  const list = Object.keys(struct)
+  if (!list.length) return []
+  const parsed = acorn.parse(input)
+  const ancestorTracker = {}
+  const ancestorSetup = {}
+  const failures = []
+  list.forEach((func) => {
+    ancestorTracker[func] = []
+    ancestorSetup[func] = ancestorWalking.bind(null, ancestorTracker)
+  })
+  walk.ancestor(parsed, ancestorSetup)
+  list.forEach((func) => {
+    // Strict processing
+    if (!some(ancestorTracker[func], isEqual.bind(null, struct[func]))) {
+      failures.push(func)
+    }
+  })
+  return failures
 }
