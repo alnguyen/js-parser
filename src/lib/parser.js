@@ -8,12 +8,12 @@ function markAsVisited (tracker, node) {
 /*
   Required - (String) input: text input to analyze
   Required - (Array) list: array of functionalities to test the input against
-  Optional - (Boolean) inclusive: test the input against the list for inclusivity? Default: true
+  Optional - (Boolean) marker: test the input against the list for inclusivity? Default: true
 
-  Output - (Object) Object of the functinoalities and if they passed the given check
+  Output - (Array) list of functionalities that didn't pass the test
 */
-export function passesList (input, list, inclusive = true) {
-  if (!list.length) return true // Nothing to match against
+export function passesList (input, list, marker = true) {
+  if (!list.length) return [] // Nothing to match against
   let parsed
   const visitSetup = {}
   const visitedTracker = {}
@@ -24,7 +24,10 @@ export function passesList (input, list, inclusive = true) {
 
   parsed = acorn.parse(input)
   walk.simple(parsed, visitSetup)
-  return Object.keys(visitedTracker).map((key) => visitedTracker[key]).indexOf(!inclusive) < 0
+  return Object.keys(visitedTracker).reduce((acc, current) => {
+    if (visitedTracker[current] !== marker) acc.push(current)
+    return acc
+  }, [])
 }
 
 /*

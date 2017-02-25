@@ -12,7 +12,8 @@ export const defaultState = {
   blacklist: [],
   userInput: '',
   whitelist: [],
-  status: 'passing'
+  passing: true,
+  status: ''
 }
 
 export class App extends Component {
@@ -23,14 +24,21 @@ export class App extends Component {
 
   // -- Handlers -- //
   handleInputChange = (evt) => {
+    const { blacklist, whitelist } = this.state
     const userInput = evt.target.value
-    let status = this.state.status
+    let passing = this.state.status
+    let status = ''
     try {
-      status = this.passesChecks(userInput) ? PASSING : FAILING
+      let w = passesList(userInput, whitelist)
+      let b = passesList(userInput, blacklist, false)
+      let failures = passesList(userInput, whitelist).concat(passesList(userInput, blacklist, false))
+      passing = failures.length ? FAILING : PASSING
+      status = failures.length ? failures.join(', ') : PASSING
     } catch (err) {
-      status = FAILING
+      passing = FAILING
+      status = 'Error'
     } finally {
-      this.setState({userInput, status})
+      this.setState({userInput, passing, status})
     }
   }
 
@@ -65,11 +73,6 @@ export class App extends Component {
   }
 
   // -- Convenience -- //
-  passesChecks = (userInput) => {
-    const { blacklist, whitelist } = this.state
-    return passesList(userInput, whitelist) && passesList(userInput, blacklist, false)
-  }
-
   isSelected = (func, list) => {
     const { blacklist, whitelist } = this.state
     switch(list) {
@@ -133,8 +136,8 @@ export class App extends Component {
   }
 
   renderResult () {
-    const { status } = this.state
-    const classNames = `status ${status}`
+    const { passing, status } = this.state
+    const classNames = `status ${passing}`
     return (
       <span className={classNames}>
         {status}

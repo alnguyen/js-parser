@@ -13,7 +13,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 describe('App', () => {
-  describe('::State', () => {
+  describe('State', () => {
     let app
     beforeEach(() => {
       app = shallow(<App />)
@@ -24,7 +24,7 @@ describe('App', () => {
     })
   })
 
-  describe('::Rendering', () => {
+  describe('Rendering', () => {
     let app
     beforeEach(() => {
       app = shallow(<App />)
@@ -60,13 +60,13 @@ describe('App', () => {
       expect(textArea.node.props.value).toEqual('')
     })
 
-    it('renders passing status on load', () => {
+    it('renders nothing for status on load', () => {
       const statusText = app.find('.status')
-      expect(statusText.text()).toEqual('passing')
+      expect(statusText.text()).toEqual('')
     })
   })
 
-  describe('::Actions', () => {
+  describe('Actions', () => {
     let app
     beforeEach(() => {
       app = mount(<App />)
@@ -79,7 +79,7 @@ describe('App', () => {
       expect(app.state().userInput).toEqual(value)
     })
 
-    describe('::status', () => {
+    describe('status', () => {
       it('sets status to passing on success', () => {
         const textArea = app.find('textarea')
         const value = 'let a = 3;'
@@ -91,7 +91,7 @@ describe('App', () => {
         expect(app.state().status).toEqual(PASSING)
       })
 
-      it('sets status to failing on error', () => {
+      it('sets status to error on error', () => {
         const textArea = app.find('textarea')
         const value = `
           let a = 5
@@ -101,21 +101,21 @@ describe('App', () => {
         const opt = functionalityItem.find('.functionality--item__opt').first()
         opt.simulate('change', { target: { value: 'whitelist', name: 'ForStatement' }})
         textArea.simulate('change', {target: {value}})
-        expect(app.state().status).toEqual(FAILING)
+        expect(app.state().status).toEqual('Error')
       })
 
-      it('sets status to failing on failure', () => {
+      it('sets status to failure reason on failure', () => {
         const textArea = app.find('textarea')
         const value = 'let a = 5;'
         const functionalityItem = app.find('.functionality--item').first()
         const opt = functionalityItem.find('.functionality--item__opt').first()
         opt.simulate('change', { target: { value: 'whitelist', name: 'ForStatement' }})
         textArea.simulate('change', {target: {value}})
-        expect(app.state().status).toEqual(FAILING)
+        expect(app.state().status).toEqual('ForStatement')
       })
     })
 
-    describe('::functionality lists', () => {
+    describe('functionality lists', () => {
       it('adds item to whitelist', () => {
         const functionalityItem = app.find('.functionality--item').first()
         const opt = functionalityItem.find('.functionality--item__opt').first()

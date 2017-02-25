@@ -20,34 +20,36 @@ describe('parser', () => {
     })
 
     describe('whitelisting', () => {
-      it('returns true for empty list', () => {
-        expect(passesList(input, [])).toEqual(true)
+      it('returns empty array for empty whitelist', () => {
+        expect(passesList(input, [])).toEqual([])
       })
 
-      it('returns true if criteria is met', () => {
-        expect(passesList(input, ['ForStatement'])).toEqual(true)
+      it('returns empty array if whitelist item is in input', () => {
+        expect(passesList(input, ['ForStatement'])).toEqual([])
       })
 
-      it('returns true if multiple criteria is met', () => {
-        expect(passesList(input, ['ForStatement', 'IfStatement'])).toEqual(true)
+      it('returns empty array if multiple whitelist items is in input', () => {
+        expect(passesList(input, ['ForStatement', 'IfStatement'])).toEqual([])
       })
 
-      it('returns false if it does not meet criteria', () => {
-        expect(passesList(input, ['FunctionDeclaration'])).toEqual(false)
+      it('returns missing item if input is missing expected functionality', () => {
+        const expectation = ['FunctionDeclaration']
+        expect(passesList(input, expectation)).toEqual(expectation)
       })
     })
 
     describe('blacklisting', () => {
-      it('returns true for empty list', () => {
-        expect(passesList(input, [], false)).toEqual(true)
+      it('returns empty array for empty blacklist', () => {
+        expect(passesList(input, [], false)).toEqual([])
       })
 
-      it('returns true if funcationlity is not in blacklist', () => {
-        expect(passesList(input, ['FunctionDeclaration'], false)).toEqual(true)
+      it('returns empty array if blacklist item is not in input', () => {
+        expect(passesList(input, ['FunctionDeclaration'], false)).toEqual([])
       })
 
-      it('returns false if functionality is blacklisted', () => {
-        expect(passesList(input, ['ForStatement'], false)).toEqual(false)
+      it('returns failure reason if item is present', () => {
+        const expectation = ['ForStatement']
+        expect(passesList(input, expectation, false)).toEqual(expectation)
       })
     })
   })
