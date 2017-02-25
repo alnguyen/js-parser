@@ -1,13 +1,13 @@
 import {
   default as App,
   defaultState
-} from './App'
+} from '../App'
 import {
   FAILING,
   FUNCTIONALITIES,
   INSTRUCTIONS,
   PASSING
-} from './constants'
+} from '../constants'
 import { mount, shallow } from 'enzyme'
 import React from 'react'
 import ReactDOM from 'react-dom'

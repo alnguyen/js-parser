@@ -29,8 +29,6 @@ export class App extends Component {
     let passing = this.state.status
     let status = ''
     try {
-      let w = passesList(userInput, whitelist)
-      let b = passesList(userInput, blacklist, false)
       let failures = passesList(userInput, whitelist).concat(passesList(userInput, blacklist, false))
       passing = failures.length ? FAILING : PASSING
       status = failures.length ? failures.join(', ') : PASSING

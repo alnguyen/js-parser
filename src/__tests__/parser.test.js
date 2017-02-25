@@ -1,4 +1,4 @@
-import { passesList, passesStructure } from './parser'
+import { passesList, passesStructure } from '../lib/parser'
 const acorn = require('acorn')
 
 describe('parser', () => {
