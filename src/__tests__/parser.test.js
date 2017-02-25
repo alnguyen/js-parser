@@ -110,12 +110,35 @@ describe('parser', () => {
         expect(passesStructureStrict(userInput, structure)).toEqual([])
       })
 
+      it('returns empty array if expected structure is a substructure of the input', () => {
+        const userInput = `
+          for(var i=0; i<5; ++i){
+            if (i === 5) {
+              break
+            }
+            for(var j = 5; j < 10; ++j){
+              if (j === 7) break
+            }
+          }`
+        const structure = {
+          'BreakStatement': ['Program', 'ForStatement', 'BlockStatement', 'IfStatement', 'BlockStatement', 'BreakStatement']
+        }
+        expect(passesStructureStrict(userInput, structure)).toEqual([])
+      })
+
       it('returns functionality if structure is not met', () => {
         const structure = {
           'BreakStatement': ['ForStatement', 'IfStatement', 'BreakStatement']
         }
-
         expect(passesStructureStrict(userInput, structure)).toEqual(['BreakStatement'])
+      })
+
+      it('returns all functionality if structure is not met', () => {
+        const structure = {
+          'BreakStatement': ['ForStatement', 'IfStatement', 'BreakStatement'],
+          'IfStatement': ['ForStatement', 'IfStatement']
+        }
+        expect(passesStructureStrict(userInput, structure)).toEqual(Object.keys(structure))
       })
     })
   })
