@@ -1,7 +1,7 @@
 export const FUNCTIONALITIES = {
-  forLoop: { text: 'For Loop', value: 'ForStatement', selected: 'none' },
-  ifStatement: { text: 'If Statement', value: 'IfStatement', selected: 'none' },
-  variableDeclaration: { text: 'Variable Declaration', value: 'VariableDeclaration', selected: 'none'}
+  ForStatement: { text: 'For Loop', value: 'ForStatement', selected: 'none' },
+  IfStatement: { text: 'If Statement', value: 'IfStatement', selected: 'none' },
+  VariableDeclaration: { text: 'Variable Declaration', value: 'VariableDeclaration', selected: 'none'}
 }
 
 export const PASSING = 'passing'

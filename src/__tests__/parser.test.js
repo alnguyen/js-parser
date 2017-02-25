@@ -55,12 +55,27 @@ describe('parser', () => {
   })
 
   describe('#passStructure', () => {
-    it('returns true for no structure expectation', () => {
-      expect(passesStructure(input, null)).toEqual(true)
+    it('returns undefined for no structure expectation', () => {
+      expect(passesStructure(input, null)).toEqual(undefined)
     })
 
     it('returns false if structure is not met', () => {
-      expect(passesStructure(input, {})).toEqual(false)
+      expect(passesStructure(input, {})).toEqual(undefined)
+    })
+
+    it.only('returns true if structure passes', () => {
+      const userInput = `
+        for(var i=0; i<5; ++i){
+          if (i === 5) {
+            break
+          }
+        }
+      `
+      const structure = {
+        'IfStatement': ['ForStatement', 'IfStatement']
+      }
+
+      expect(passesStructure(userInput, structure)).toEqual([])
     })
   })
 })
