@@ -4,7 +4,10 @@ import {
   INSTRUCTIONS,
   PASSING
 } from './constants'
-import { passesList } from './lib/parser'
+import {
+  passesList,
+  passesStructure
+} from './lib/parser'
 import React, { Component } from 'react';
 import './App.css';
 
@@ -12,6 +15,8 @@ export const defaultState = {
   blacklist: [],
   passing: true,
   status: '',
+  structureInput: '',
+  structureMap: {},
   userInput: '',
   whitelist: []
 }
@@ -22,11 +27,14 @@ export class App extends Component {
     this.state = defaultState
   }
 
-  evaluate = (userInput, bList, wList) => {
-    const { blacklist, whitelist } = this.state
-    const useBList = bList || blacklist
-    const useWList = wList || whitelist
-    const failures = passesList(userInput, useWList).concat(passesList(userInput, useBList, false))
+  evaluate = (userInput, opts = {}) => {
+    const { blacklist, structureMap, whitelist } = this.state
+    const useBList = opts.bList || blacklist
+    const useWList = opts.wList || whitelist
+    const structMap = opts.structureMap || structureMap
+    const failures = passesList(userInput, useWList).concat(
+      passesList(userInput, useBList, false),
+      passesStructure(userInput, structMap))
     return failures
   }
 
@@ -55,6 +63,23 @@ export class App extends Component {
     } finally {
       this.setState({userInput, passing, status})
     }
+  }
+
+  handleStructureChange = (evt) => {
+    const { userInput } = this.state
+    const structureInput = evt.target.value
+    const structures = structureInput.split('\n')
+    const structureMap = structures.reduce((acc, current) => {
+      const split = current.split(',').map((func) => func.replace(' ', ''))
+      const key = split[split.length-1]
+      acc[key] = split
+      return acc
+    }, {})
+
+    const failures = this.evaluate(userInput, {structureMap})
+    const {passing, status} = this.getStatus(failures)
+
+    this.setState({structureInput, structureMap, passing, status})
   }
 
   handleOptionChange = (evt) => {
@@ -87,7 +112,7 @@ export class App extends Component {
         break
       // no default
     }
-    const failures = this.evaluate(userInput, newBList, newWList)
+    const failures = this.evaluate(userInput, {bList: newBList, wList: newWList})
     const { passing, status } = this.getStatus(failures)
     this.setState({blacklist: newBList, whitelist: newWList, passing, status})
   }
@@ -143,12 +168,27 @@ export class App extends Component {
     )
   }
 
+  renderStructureInput () {
+    const { handleStructureChange, state } = this
+    const placeholder = `Enter structure expectations.\nNewline delimited per functionality.\nComma delimited per structure.`
+    return (
+      <textarea
+        className='structure-input'
+        onChange={handleStructureChange}
+        placeholder={placeholder}
+        value={state.structureInput}
+      />
+    )
+  }
+
   renderTextArea () {
     const { handleInputChange, state } = this
 
     return (
       <textarea
+        className='user-input'
         onChange={handleInputChange}
+        placeholder={'Enter code here'}
         value={state.userInput}
       />
     )
@@ -174,6 +214,7 @@ export class App extends Component {
           {INSTRUCTIONS}
         </p>
         {this.renderFunctionalityList()}
+        {this.renderStructureInput()}
         {this.renderTextArea()}
         {this.renderResult()}
       </div>

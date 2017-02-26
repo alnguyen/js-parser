@@ -54,8 +54,8 @@ describe('App', () => {
       expect(functionalitiesOptions.length).toBe(expectedOptions)
     })
 
-    it('renders an empty textarea on load', () => {
-      const textArea = app.find('textarea')
+    it('renders an empty user-input on load', () => {
+      const textArea = app.find('.user-input')
       expect(textArea.length).toBe(1)
       expect(textArea.node.props.value).toEqual('')
     })
@@ -63,6 +63,12 @@ describe('App', () => {
     it('renders nothing for status on load', () => {
       const statusText = app.find('.status')
       expect(statusText.text()).toEqual('')
+    })
+
+    it('renders an empty structure input on load', () => {
+      const textArea = app.find('.structure-input')
+      expect(textArea.length).toBe(1)
+      expect(textArea.node.props.value).toEqual('')
     })
   })
 
@@ -73,7 +79,7 @@ describe('App', () => {
     })
 
     it('updates state on input change', () => {
-      const textArea = app.find('textarea')
+      const textArea = app.find('.user-input')
       const value = 'let a = 3;'
       textArea.simulate('change', {target: {value}})
       expect(app.state().userInput).toEqual(value)
@@ -81,7 +87,7 @@ describe('App', () => {
 
     describe('status', () => {
       it('sets status to passing on success', () => {
-        const textArea = app.find('textarea')
+        const textArea = app.find('.user-input')
         const value = 'let a = 3;'
         const functionalityItem = app.find('.functionality--item').first()
         const opt = functionalityItem.find('.functionality--item__opt').first()
@@ -92,7 +98,7 @@ describe('App', () => {
       })
 
       it('sets status to error on error', () => {
-        const textArea = app.find('textarea')
+        const textArea = app.find('.user-input')
         const value = `
           let a = 5
           for (
@@ -105,7 +111,7 @@ describe('App', () => {
       })
 
       it('sets status to failure reason on failure', () => {
-        const textArea = app.find('textarea')
+        const textArea = app.find('.user-input')
         const value = 'let a = 5;'
         const functionalityItem = app.find('.functionality--item').first()
         const opt = functionalityItem.find('.functionality--item__opt').first()

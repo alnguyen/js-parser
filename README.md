@@ -36,7 +36,7 @@ Compared to Esprima:
 **UI**
 
 1. Ability to use functionalities multiple times
+1. Define failing status as structural or white/blacklisting failure
 1. Better UI for functionalities selection
   1. 3 Lists -- One for each state, can move functions between states
-1. Form field for specifying structure expectation
 1. Code editor instead of textarea
