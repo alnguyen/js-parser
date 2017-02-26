@@ -40,7 +40,7 @@ describe('App', () => {
       const functionalitiesList = app.find('.functionality--list')
       const functionalitiesItems = functionalitiesList.find('.functionality--item__text')
       expect(functionalitiesList.length).toBe(1)
-      expect(functionalitiesItems.length).toBe(3)
+      expect(functionalitiesItems.length).toBe(Object.keys(FUNCTIONALITIES).length)
       const texts = functionalitiesItems.map((item) => item.text())
       Object.keys(FUNCTIONALITIES).forEach((item) => {
         expect(texts).toContain(item)

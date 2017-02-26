@@ -18,16 +18,14 @@ function nonStrictComparison (expected, ancestry) {
 
   let lastIndex = 0
   let passed = false
-  loop1:
   for(var i = 0; i < expected.length; ++i) {
-    loop2:
     for(var j = lastIndex; j < ancestry.length; ++j) {
       if (expected[i] === ancestry[j]) {
         lastIndex = j + 1
         if (i === expected.length - 1) passed = true
-        break loop2
+        break
       }
-      if (j === ancestry.length - 1) break loop1
+      if (j === ancestry.length - 1) return
     }
   }
   return passed

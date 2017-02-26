@@ -1,10 +1,52 @@
-export const FUNCTIONALITIES = {
-  ForStatement: { selected: 'none' },
-  IfStatement: { selected: 'none' },
-  VariableDeclaration: { selected: 'none'}
-}
-
 export const PASSING = 'passing'
 export const FAILING = 'failing'
-
 export const INSTRUCTIONS = `Please select the type of functionalities you would like to whitelist or blacklist.`
+
+export const FUNCTIONALITIES = {
+  AssignmentExpression: { selected: 'none'},
+  ArrayExpression: { selected: 'none'},
+  ArrowFunctionExpression: { selected: 'none'},
+  BlockStatement: { selected: 'none'},
+  BinaryExpression: { selected: 'none'},
+  BreakStatement: { selected: 'none'},
+  CallExpression: { selected: 'none'},
+  CatchClause: { selected: 'none'},
+  ClassBody: { selected: 'none'},
+  ClassDeclaration: { selected: 'none'},
+  ClassExpression: { selected: 'none'},
+  ConditionalExpression: { selected: 'none'},
+  ContinueStatement: { selected: 'none'},
+  DoWhileStatement: { selected: 'none'},
+  DebuggerStatement: { selected: 'none'},
+  EmptyStatement: { selected: 'none'},
+  ExpressionStatement: { selected: 'none'},
+  ForStatement: { selected: 'none'},
+  ForInStatement: { selected: 'none'},
+  FunctionDeclaration: { selected: 'none'},
+  FunctionExpression: { selected: 'none'},
+  Identifier: { selected: 'none'},
+  IfStatement: { selected: 'none'},
+  Literal: { selected: 'none'},
+  LabeledStatement: { selected: 'none'},
+  LogicalExpression: { selected: 'none'},
+  MemberExpression: { selected: 'none'},
+  MethodDefinition: { selected: 'none'},
+  NewExpression: { selected: 'none'},
+  ObjectExpression: { selected: 'none'},
+  Program: { selected: 'none'},
+  Property: { selected: 'none'},
+  RestElement: { selected: 'none'},
+  ReturnStatement: { selected: 'none'},
+  SequenceExpression: { selected: 'none'},
+  SwitchStatement: { selected: 'none'},
+  SwitchCase: { selected: 'none'},
+  ThisExpression: { selected: 'none'},
+  ThrowStatement: { selected: 'none'},
+  TryStatement: { selected: 'none'},
+  UnaryExpression: { selected: 'none'},
+  UpdateExpression: { selected: 'none'},
+  VariableDeclaration: { selected: 'none'},
+  VariableDeclarator: { selected: 'none'},
+  WhileStatement: { selected: 'none'},
+  WithStatement: { selected: 'none'}
+}
