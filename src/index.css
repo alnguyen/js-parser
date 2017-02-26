@@ -6,10 +6,20 @@ body {
 
 textarea {
   min-height: 200px;
-  min-width: 50%;
+  min-width: 500px;
 }
 
-.functionality--list { list-style-type: none; }
+.functionality--list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.functionality--item__text {
+  display: inline-block;
+  margin: 2px 0;
+  text-align: left;
+  width: 185px;
+}
 
 .status {
   display: block;
