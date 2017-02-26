@@ -87,29 +87,28 @@ export class App extends Component {
   renderFunctionalityList () {
     const functionalities = Object.keys(FUNCTIONALITIES)
     const renderFunctionality = functionalities.map((func, idx) => {
-      const option = FUNCTIONALITIES[func]
       return (
-        <li key={option.value} className='functionality--item'>
-          <span className='functionality--item__text'>{`${option.text}`}</span>
+        <li key={func} className='functionality--item'>
+          <span className='functionality--item__text'>{`${func}`}</span>
           <input
             className='functionality--item__opt'
-            checked={this.isSelected(option.value, 'whitelist')}
+            checked={this.isSelected(func, 'whitelist')}
             type='radio'
-            name={option.value}
+            name={func}
             value='whitelist'
             onChange={this.handleOptionChange} /> Whitelist
           <input
             className='functionality--item__opt'
-            checked={this.isSelected(option.value, 'blacklist')}
+            checked={this.isSelected(func, 'blacklist')}
             type='radio'
-            name={option.value}
+            name={func}
             value='blacklist'
             onChange={this.handleOptionChange} /> Blacklist
           <input
             className='functionality--item__opt'
-            checked={this.isSelected(option.value, 'none')}
+            checked={this.isSelected(func, 'none')}
             type='radio'
-            name={option.value}
+            name={func}
             value='none'
             onChange={this.handleOptionChange} /> None
         </li>

@@ -43,7 +43,7 @@ describe('App', () => {
       expect(functionalitiesItems.length).toBe(3)
       const texts = functionalitiesItems.map((item) => item.text())
       Object.keys(FUNCTIONALITIES).forEach((item) => {
-        expect(texts).toContain(FUNCTIONALITIES[item].text)
+        expect(texts).toContain(item)
       })
     })
 

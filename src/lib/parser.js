@@ -61,7 +61,7 @@ export function passesList (input, list, marker = true) {
 }
 
 /*
-  Attempt at validating code structure.
+  Attempt at validating code structure loosely.
   Required - (String) input: text input to analyze
   Required - (Object) structure: Functionality as key, value is array of ordering
            - Example 1: IfStatement nested inside a ForStatement
@@ -72,8 +72,7 @@ export function passesList (input, list, marker = true) {
               {
                 'IfStatement': ['FunctionDeclaration', 'ForStatement', 'IfStatement']
               }
-  Optional - (Boolean) strict: if the structure needs to be strictly enforced. Default: false
-           - Example - Input
+           - Example 3 w/ Input
               `function doSomething () {
                 for(i=0; i < 5; ++i) {
                   if (i === 3) {
@@ -83,8 +82,7 @@ export function passesList (input, list, marker = true) {
               }``
            - Expectation: ['ForStatement', 'IfStatement']
            - Parser returns: ['Program', 'FunctionDeclaration', 'ForStatement', 'IfStatement', 'BreakStatement']
-           - (Strict): Fail
-           - (Non-strict): Pass
+           - Pass
 
   Output - (Array) List of functionality that doesn't meet the expected criteria
 */
@@ -109,6 +107,24 @@ export function passesStructure (input, structure) {
   return failures
 }
 
+/*
+  Attempt at validating code structure strictly.
+  Required - (String) input: text input to analyze
+  Required - (Object) structure: Functionality as key, value is array of ordering
+           - Example
+              `function doSomething () {
+                for(i=0; i < 5; ++i) {
+                  if (i === 3) {
+                    break
+                  }
+                }
+              }``
+           - Expectation: ['ForStatement', 'IfStatement']
+           - Parser returns: ['Program', 'FunctionDeclaration', 'ForStatement', 'IfStatement', 'BreakStatement']
+           - Fails
+
+  Output - (Array) List of functionality that doesn't meet the expected criteria
+*/
 export function passesStructureStrict (input, structure) {
   const struct = structure || {}
   const list = Object.keys(struct)
