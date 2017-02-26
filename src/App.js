@@ -22,16 +22,33 @@ export class App extends Component {
     this.state = defaultState
   }
 
+  evaluate = (userInput, bList, wList) => {
+    const { blacklist, whitelist } = this.state
+    const useBList = bList || blacklist
+    const useWList = wList || whitelist
+    const failures = passesList(userInput, useWList).concat(passesList(userInput, useBList, false))
+    return failures
+  }
+
+  getStatus = (failures) => {
+    let passing
+    let status
+
+    passing = failures.length ? FAILING : PASSING
+    status = failures.length ? failures.join(', ') : PASSING
+    return { passing, status }
+  }
+
   // -- Handlers -- //
   handleInputChange = (evt) => {
-    const { blacklist, whitelist } = this.state
     const userInput = evt.target.value
     let passing = this.state.status
-    let status = ''
+    let status
     try {
-      const failures = passesList(userInput, whitelist).concat(passesList(userInput, blacklist, false))
-      passing = failures.length ? FAILING : PASSING
-      status = failures.length ? failures.join(', ') : PASSING
+      const failures = this.evaluate(userInput)
+      const newStatus = this.getStatus(failures)
+      passing = newStatus.passing
+      status = newStatus.status
     } catch (err) {
       passing = FAILING
       status = 'Error'
@@ -42,7 +59,7 @@ export class App extends Component {
 
   handleOptionChange = (evt) => {
     const { name, value } = evt.target
-    const { blacklist, whitelist } = this.state
+    const { blacklist, userInput, whitelist } = this.state
     let newBList = blacklist.slice(0)
     let newWList = whitelist.slice(0)
     let bIdx
@@ -70,7 +87,9 @@ export class App extends Component {
         break
       // no default
     }
-    this.setState({blacklist: newBList, whitelist: newWList})
+    const failures = this.evaluate(userInput, newBList, newWList)
+    const { passing, status } = this.getStatus(failures)
+    this.setState({blacklist: newBList, whitelist: newWList, passing, status})
   }
 
   // -- Convenience -- //
