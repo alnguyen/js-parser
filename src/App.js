@@ -10,10 +10,10 @@ import './App.css';
 
 export const defaultState = {
   blacklist: [],
-  userInput: '',
-  whitelist: [],
   passing: true,
-  status: ''
+  status: '',
+  userInput: '',
+  whitelist: []
 }
 
 export class App extends Component {
@@ -29,7 +29,7 @@ export class App extends Component {
     let passing = this.state.status
     let status = ''
     try {
-      let failures = passesList(userInput, whitelist).concat(passesList(userInput, blacklist, false))
+      const failures = passesList(userInput, whitelist).concat(passesList(userInput, blacklist, false))
       passing = failures.length ? FAILING : PASSING
       status = failures.length ? failures.join(', ') : PASSING
     } catch (err) {
@@ -47,27 +47,30 @@ export class App extends Component {
     let newWList = whitelist.slice(0)
     let bIdx
     let wIdx
+    const removeFromWhitelist = () => {
+      wIdx = whitelist.indexOf(name)
+      if (wIdx !== -1) newWList.splice(wIdx, 1)
+    }
+    const removeFromBlacklist = () => {
+      bIdx = blacklist.indexOf(name)
+      if (bIdx !== -1) newBList.splice(bIdx, 1)
+    }
     switch(value) {
       case 'none':
-        bIdx = blacklist.indexOf(name)
-        wIdx = whitelist.indexOf(name)
-        if (bIdx !== -1) newBList.splice(bIdx, 1)
-        if (wIdx !== -1) newWList.splice(wIdx, 1)
-        this.setState({blacklist: newBList, whitelist: newWList})
+        removeFromBlacklist()
+        removeFromWhitelist()
         break
       case 'blacklist':
         newBList.push(name)
-        wIdx = whitelist.indexOf(name)
-        if (wIdx !== -1) newWList.splice(wIdx, 1)
-        this.setState({blacklist: newBList, whitelist: newWList})
+        removeFromWhitelist()
         break
       case 'whitelist':
         newWList.push(name)
-        bIdx = blacklist.indexOf(name)
-        if (bIdx !== -1) newBList.splice(bIdx, 1)
-        this.setState({blacklist: newBList, whitelist: newWList})
+        removeFromBlacklist()
         break
+      // no default
     }
+    this.setState({blacklist: newBList, whitelist: newWList})
   }
 
   // -- Convenience -- //
