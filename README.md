@@ -7,8 +7,13 @@ This is a quick and dirty JS parser that does a couple of things:
   1. This list determines what a user *can not* include in their input
 1. Allows the user to input some code and be analyzed based on the blacklist and whitelist definitions
 
+#### To Run
+- `yarn install`
+- `yarn start`
 
-**This parser uses Acorn under the hood**
+You can also run some tests: `yarn test`
+
+#### This parser uses Acorn under the hood**
 
 Compared to Esprima:
 
