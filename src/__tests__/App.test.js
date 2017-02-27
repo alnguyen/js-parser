@@ -121,6 +121,39 @@ describe('App', () => {
       })
     })
 
+    describe('structure', () => {
+      it('sets structureMap and structureInput state correctly', () => {
+        const structureInput = app.find('.structure-input')
+        const value = 'ForStatement, IfStatement'
+        structureInput.simulate('change', {target: {value}})
+        expect(app.state().structureMap).toEqual({IfStatement: ['ForStatement', 'IfStatement']})
+        expect(app.state().structureInput).toEqual(value)
+      })
+
+      it('sets status to failure reason on failure', () => {
+        const structureInput = app.find('.structure-input')
+        const value = 'ForStatement, IfStatement'
+        structureInput.simulate('change', {target: {value}})
+        expect(app.state().passing).toEqual(FAILING)
+        expect(app.state().status).toEqual('IfStatement')
+      })
+
+      it('sets status to passing reason on pass', () => {
+        const structureInput = app.find('.structure-input')
+        const userInput = app.find('.user-input')
+        const value = 'ForStatement, IfStatement'
+        const userValue = `for(var i=0;i<10;++i){
+          if(i > 8) {
+            console.log('hi')
+          }
+        }`
+        structureInput.simulate('change', {target: {value}})
+        userInput.simulate('change', {target: {value: userValue}})
+        expect(app.state().passing).toEqual(PASSING)
+        expect(app.state().status).toEqual(PASSING)
+      })
+    })
+
     describe('functionality lists', () => {
       it('adds item to whitelist', () => {
         const functionalityItem = app.find('.functionality--item').first()
