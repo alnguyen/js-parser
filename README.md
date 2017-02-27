@@ -13,7 +13,7 @@ This is a quick and dirty JS parser that does a couple of things:
 
 You can also run some tests: `yarn test`
 
-#### This parser uses Acorn under the hood**
+#### This parser uses Acorn under the hood
 
 Compared to Esprima:
 
