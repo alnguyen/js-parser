@@ -35,6 +35,7 @@ Compared to Esprima:
 1. Have App be a container
   1. Move the parser form into it's own component
   1. Have prop types inform the parser form
+  1. Introduce Redux
   1. Store state in App container and pass into prop types for parser form
   1. Allow parser to have internal state to share the parsed input instead of re-parsing every eval
 
