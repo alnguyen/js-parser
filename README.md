@@ -10,6 +10,8 @@ This is a quick and dirty JS parser that does a couple of things:
 #### To Run
 - `yarn install`
 - `yarn start`
+- `Navigate your browser to http://localhost:3000`
+- `Play around!`
 
 You can also run some tests: `yarn test`
 
