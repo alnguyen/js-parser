@@ -1,6 +1,14 @@
 dependencies:
+  pre:
+    - yarn global add greenkeeper-lockfile@1
+    - greenkeeper-lockfile-update
   override:
     - yarn
+  post:
+    - greenkeeper-lockfile-upload
 test:
   override:
     - yarn test
+machine:
+  node:
+    version: 8
