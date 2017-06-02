@@ -1,5 +1,7 @@
 ## Viewable Here: https://alnguyen.github.io/js-parser/
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/alnguyen/js-parser.svg)](https://greenkeeper.io/)
+
 ## Info
 
 This is a quick and dirty JS parser that does a couple of things:
