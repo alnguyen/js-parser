@@ -1,6 +1,7 @@
 ## Viewable Here: https://alnguyen.github.io/js-parser/
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/alnguyen/js-parser.svg)](https://greenkeeper.io/)
+[![Known Vulnerabilities](https://snyk.io/test/github/alnguyen/js-parser/badge.svg)](https://snyk.io/test/github/alnguyen/js-parser)
 
 ## Info
 
