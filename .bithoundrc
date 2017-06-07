@@ -3,6 +3,7 @@
     "unused-ignores": [
       "request",
       "react-md",
-    ]
+    ],
+    "mute": []
   }
 }
