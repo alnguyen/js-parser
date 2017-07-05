@@ -9,7 +9,7 @@
     "react-scripts": "1.0.7"
   },
   "dependencies": {
-    "acorn": "5.0.3",
+    "acorn": "5.1.0",
     "lodash": "4.17.4",
     "react": "15.5.4",
     "react-dom": "15.5.4",
